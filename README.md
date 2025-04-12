@@ -1,6 +1,8 @@
-# Asteroid Miner / Project Kessler
+# Project Kessler: Asteroid Miner
 
-An Asteroids-like clone. I am planning to expand the project to make it more rogue-like and give it more depth
+Asteroids meets rogue-lite. Mine minerals from the asteroid field without being taken out by the chaos. Use your minerals for research and profits. Use your profits to buy upgrades you've researched.
+
+This is as a project to practice OOP, class inheritance, and building helper-methods in python, but I wanted to have fun with it, so I built the classic Asteroids-Clone into an asteroid-mining-roguelite.
 
 ## Roadmap
 - Increase the map-size and/or variable sizes.

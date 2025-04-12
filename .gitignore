@@ -1,6 +1,7 @@
 # files
 setup.py
 temp.py
+savegame.dat
 
 # directories
 venv/

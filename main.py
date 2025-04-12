@@ -1,4 +1,6 @@
 import pygame
+import sys
+import os
 from constants import *
 from player import Player
 from asteroid import Asteroid
@@ -22,25 +24,26 @@ def main():
     AsteroidField.containers = (updatable)
     Bullet.containers = (bullets, updatable, drawable)
 
-    game = Game(screen)
     menu = Menu(screen)
-
+    game = Game(screen, menu)
 
     while True:
         if game.state == "MAIN_MENU":
             action = menu.main_menu()
             if action == "START_GAME":
-                if sum(game.resources) == 0:
-                    game.state = "START_GAME"
-                else:
+                if os.path.exists("savegame.dat"):
+                    game.load_game()
                     game.state = "LOAD_GAME"
+                else:
+                    game.reset()
+                    game.state = "START_GAME"
             elif action == "INSTRUCTIONS":
                 game.state = "INSTRUCTIONS"
             elif action == "OPTIONS":
                 game.state = "OPTIONS"
             elif action == "EXIT":
                 pygame.quit()
-                return
+                sys.exit()
         
         elif game.state == "INSTRUCTIONS":
             action = menu.instructions()
@@ -52,23 +55,16 @@ def main():
             if action == "MAIN_MENU" or action == "QUIT":
                 game.state = action
             
-        if game.state == "START_GAME" or game.state == "CONTINUE":
+        if game.state == "START_GAME" or game.state == "PLAYING":
             game_result = game.run()
             if game_result == "GAME_OVER":
+                game.save_game()
                 game.state = "MAIN_MENU"
             elif game_result == "QUIT":
                 pygame.quit()
-                return
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    game.state = "MAIN_MENU"
-
-
-        pygame.display.flip()
+                sys.exit()
+        else:
+            game.state = "MAIN_MENU"
         
 
 

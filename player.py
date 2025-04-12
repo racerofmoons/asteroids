@@ -8,6 +8,7 @@ class Player(CircleShape):
         self.color = (0,128,0)
         self.rotation = 0
         self.shoot_timer = 0.0
+        self.bomb_timer = 0.0
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -41,7 +42,14 @@ class Player(CircleShape):
             if self.shoot_timer <= 0:
                 self.shoot_timer = 0.3
                 self.shoot()
+        if keys[pygame.KMOD_SHIFT] or keys[pygame.K_KP5]:
+            if self.bomb_timer <= 0:
+                self.bomb_timer = 3.0
+                self.bomb()
 
     def shoot(self):
         bullet = Bullet(self.position, radius=SHOT_RADIUS)
         bullet.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+    
+    def bomb(self):
+        pass

@@ -15,8 +15,35 @@ PLAYER_SHOOT_COOLDOWN = 0.3
 
 SHOT_RADIUS = 5
 
+# Game Menus
+MAIN_MENU_OPTIONS = ["Start Game", "Instructions", "Options", "Exit"]
+
+# Game States
+GAME_STATE = {
+    1: "MAIN MENU", 
+    2: "PLAYING",
+    3: "PAUSE_MENU", 
+    4: "CONTINUE MENU", 
+    5: "BUY MENU", 
+    6: "INSTRUCTIONS", 
+    7: "OPTIONS", 
+    8: "GAME_OVER"}
 
 #  Resource Indecies
+RESOURCES = {
+    0: "Credits",
+    1: "Silica",
+    2: "Iron",
+    3: "Aluminum",
+    4: "Cobalt",
+    5: "Gold",
+    6: "Uranium",
+    7: "Thorium",
+    8: "Level",
+    9: "XP",
+    10: "XP to Next Level"
+}
+
 CREDITS = 0
 SILICA = 1
 IRON = 2
