@@ -4,6 +4,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from bullet import Bullet
+from game import Game
 
 def main():
     pygame.init()
@@ -21,6 +22,7 @@ def main():
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     asteroid_field = AsteroidField()
+    game = Game()
 
 
     while True:
@@ -39,7 +41,9 @@ def main():
             for bullet in bullets:
                 if bullet.collision(asteroid):
                     bullet.kill()
-                    asteroid.split("bullet")
+                    result = asteroid.split("bullet")
+                    if isinstance(result, int):
+                        game.score_keeper(result)
 
         asteroid_list = asteroids.sprites()
         for i, asteroid1 in enumerate(asteroid_list):

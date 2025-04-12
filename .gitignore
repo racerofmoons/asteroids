@@ -1,2 +1,7 @@
+# files
+setup.py
+
+# directories
 venv/
 __pycache__/
+build/

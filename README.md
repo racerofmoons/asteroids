@@ -24,6 +24,8 @@ An Asteroids-like clone. I am planning to expand the project to make it more rog
     - Missiles
         T1 = Basic cannon but explodes on impact
         Higher tiers increase speed and explosion radius high-tiers add fragments that also kill asteroids
+    - Efficient Mining upgrades
+    - Trader Bonuses
 - Turret - fires on a timer randomly, similar to bullet-hell games. Mirror weapon types, but have a long reload time. Higher tiers unlock auto-targeting closest asteroids
 - Shield - provides extra lives for the run
 - Mineral count will allow unlocking new objects between runs. Notifications should pop for the resource type and "mineral value" should be on screen as a counter.

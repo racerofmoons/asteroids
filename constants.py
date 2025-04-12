@@ -13,3 +13,22 @@ PLAYER_SHOOT_SPEED = 500
 PLAYER_SHOOT_COOLDOWN = 0.3
 
 SHOT_RADIUS = 5
+
+#  Resource Indecies
+CREDITS = 0
+SILICA = 1
+IRON = 2
+ALUMINUM = 3
+COBALT = 4
+GOLD = 5
+URANIUM = 6
+THORIUM = 7
+
+# Asteroid Colors
+SILICA_COLOR = (194,178,128), # Sand
+IRON_COLOR = (185,78,72), # Deep Chestnut
+ALUMINUM_COLOR =  (145,163,176), # Cadet Grey
+COBALT_COLOR = (176,196,222), # Light Steel Blue
+GOLD_COLOR =  (218,165,32), # Goldenrod
+URANIUM_COLOR = (173,255,47), # Green Yellow
+THORIUM_COLOR = (135,206,235), # Sky Blue
