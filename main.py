@@ -39,22 +39,19 @@ def main():
             for bullet in bullets:
                 if bullet.collision(asteroid):
                     bullet.kill()
-                    asteroid.kill()
+                    asteroid.split("bullet")
+
+        asteroid_list = asteroids.sprites()
+        for i, asteroid1 in enumerate(asteroid_list):
+            for asteroid2 in asteroid_list[i+1:]:
+                if asteroid1.collision(asteroid2):
+                    asteroid1.split("asteroid")
+                    asteroid2.split("asteroid")
 
         for object in asteroids:
             if object.collision(player):
                 print("Game Over!")
                 return
-
-#        colliding_asteroids = []
-#        asteroid_list = asteroids.sprites()
-#        for i, asteroid1 in enumerate(asteroid_list):
-#            for asteroid2 in asteroid_list[i + 1:]:
-#                if asteroid1.collision(asteroid2):
-#                    colliding_asteroids.append((asteroid1, asteroid2))
-#        for asteroid1, asteroid2 in colliding_asteroids:
-#            asteroid1.overlap(asteroid2)
-#            asteroid1.asteroid_collision(asteroid2)
 
         pygame.display.flip()
         dt = (pygame.time.Clock().tick(60) / 1000)
