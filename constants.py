@@ -54,9 +54,6 @@ URANIUM = 6
 THORIUM = 7
 
 # Asteroid Colors
-WHITE_COLOR = (255, 255, 255) # White
-GRAY_COLOR = (128, 128, 128) # Gray
-BLACK_COLOR = (0, 0, 0) # Black
 SILICA_COLOR = (194,178,128), # Sand
 IRON_COLOR = (185,78,72), # Deep Chestnut
 ALUMINUM_COLOR =  (145,163,176), # Cadet Grey
@@ -65,3 +62,10 @@ GOLD_COLOR =  (218,165,32), # Goldenrod
 URANIUM_COLOR = (173,255,47), # Green Yellow
 THORIUM_COLOR = (135,206,235), # Sky Blue
 
+# Other Colors
+WHITE_COLOR = (255, 255, 255) # White
+GRAY_COLOR = (128, 128, 128) # Gray
+BLACK_COLOR = (0, 0, 0) # Black
+BUTTON_COLOR= (100, 100, 100)
+BUTTON_HOVER_COLOR = (200, 200, 200)
+LIGHT_GREY_COLOR = (200, 200, 200)

@@ -32,8 +32,8 @@ def main():
             action = menu.main_menu()
             if action == "START_GAME":
                 if os.path.exists("savegame.dat"):
-                    game.load_game()
-                    game.state = "LOAD_GAME"
+                    # game.load_game()
+                    game.state = "START_GAME"
                 else:
                     game.reset()
                     game.state = "START_GAME"

@@ -1,6 +1,7 @@
 import pygame
 import sys
 from constants import *
+from ui import *
 
 user_menu_inputs = [
     ((pygame.K_UP, pygame.K_w, pygame.K_KP_8), "UP"),
@@ -14,6 +15,7 @@ class Menu:
         self.title_font = pygame.font.Font(None, 74)
         self.option_font = pygame.font.Font(None, 36)
         self.clock = pygame.time.Clock()
+        self.keyboard_navigation = True
     
     def flip_helper(self):
         pygame.display.flip()
@@ -41,25 +43,57 @@ class Menu:
                         selected_option = (selected_option + 1) % len(menu_options)
                     if action == "SELECT":
                         return selected_option, menu_options[selected_option].upper().replace(" ", "_")
+        elif event.type == pygame.MOUSEMOTION:
+            self.keyboard_navigation = False
         return selected_option, None
+    
+    def create_menu_buttons(self, menu_options, selected_option=0):
+        buttons = []
+        for i, option in enumerate(menu_options):
+            btn = Button(
+                position = (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + i * 50),
+                text = option,
+                font = self.option_font,
+                color = GRAY_COLOR,
+                hover_color = WHITE_COLOR,
+                action = lambda opt=option: opt
+            )
+            buttons.append(btn)
+        return buttons
+    
+    def draw_menu_buttons(self, buttons, selected_option=0):
+        for i, button in enumerate(buttons):
+            is_selected = (selected_option is not None and i == selected_option)
+            button.draw(self.screen, is_selected)
+
 
     def main_menu(self):
         menu_running = True
         selected_option = 0
+        menu_buttons = self.create_menu_buttons(MAIN_MENU_OPTIONS)
+
         while menu_running:
+            self.screen.fill(BLACK_COLOR)
+            for i, button in enumerate(menu_buttons):
+                if not self.keyboard_navigation:
+                    if button.is_hovered():
+                        selected_option = i
+                        break
+
             for event in pygame.event.get():
                 result = self.menu_event_handler(event, MAIN_MENU_OPTIONS, selected_option)
                 selected_option = result[0]
                 if result[1]:
                     return result[1]
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    for button in menu_buttons:
+                        action_result = button.click()
+                        if action_result:
+                            return action_result
                     
             self.title_printer("Project Kessler - Asteroid Miner", WHITE_COLOR, BLACK_COLOR)
 
-            for i, option in enumerate(MAIN_MENU_OPTIONS):
-                color = WHITE_COLOR if i == selected_option else GRAY_COLOR
-                option_text = self.option_font.render(option, True, color)
-                option_rect = option_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 50))
-                self.screen.blit(option_text, option_rect)
+            self.draw_menu_buttons(menu_buttons, selected_option)
             
             self.flip_helper()
 
