@@ -5,10 +5,13 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from bullet import Bullet
 from game import Game
+from menu import Menu
+
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Project Kessler")
     pygame.time.Clock()
     dt = 0
     drawable = pygame.sprite.Group()
@@ -22,49 +25,56 @@ def main():
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     asteroid_field = AsteroidField()
-    game = Game()
+    game = Game(screen)
+    menu = Menu(screen)
 
 
     while True:
+        if game.state == "MAIN_MENU":
+            action = menu.main_menu()
+            if action == "START_GAME":
+                if sum(game.resources) == 0:
+                    game.state = "START_GAME"
+                else:
+                    game.state = "LOAD_GAME"
+            elif action == "INSTRUCTIONS":
+                game.state = "INSTRUCTIONS"
+            elif action == "OPTIONS":
+                game.state = "OPTIONS"
+            elif action == "EXIT":
+                pygame.quit()
+                return
+        
+        elif game.state == "INSTRUCTIONS":
+            action = menu.instructions()
+            if action == "MAIN_MENU" or action == "QUIT":
+                game.state = action
+        
+        elif game.state == "OPTIONS":
+            action = menu.options()
+            if action == "MAIN_MENU" or action == "QUIT":
+                game.state = action
+            
+        if game.state == "START_GAME" or game.state == "CONTINUE":
+            game_result = game.run()
+            if game_result == "GAME_OVER":
+                game.state = "MAIN_MENU"
+            elif game_result == "QUIT":
+                pygame.quit()
+                return
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        screen.fill("black")
-        updatable.update(dt)
-        if player.shoot_timer > 0:
-            player.shoot_timer -= dt
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    game.state = "MAIN_MENU"
 
-        for object in drawable:
-            object.draw(screen)
-
-        for asteroid in asteroids:
-            for bullet in bullets:
-                if bullet.collision(asteroid):
-                    bullet.kill()
-                    result = asteroid.split("bullet")
-                    if isinstance(result, int):
-                        game.score_keeper(result)
-
-        asteroid_list = asteroids.sprites()
-        for i, asteroid1 in enumerate(asteroid_list):
-            for asteroid2 in asteroid_list[i+1:]:
-                if asteroid1.collision(asteroid2):
-                    asteroid1.split("asteroid")
-                    asteroid2.split("asteroid")
-
-        for object in asteroids:
-            if object.collision(player):
-                print("Game Over!")
-                return
 
         pygame.display.flip()
-        dt = (pygame.time.Clock().tick(60) / 1000)
+        dt = (pygame.time.Clock().tick(FPS) / 1000)
         
 
-
-    print("Starting Asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
 
 if __name__ == "__main__":
     main()

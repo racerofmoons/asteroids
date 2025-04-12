@@ -77,7 +77,7 @@ class Asteroid(CircleShape):
         if radius is None:
             radius = self.radius
         if num_verticies is None:
-            num_verticies = random.randint(8, 20)
+            num_verticies = random.randint(8, 16)
         vertecies = []
         for i in range(num_verticies):
             angle = (i / num_verticies) * (2 * math.pi)

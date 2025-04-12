@@ -1,5 +1,6 @@
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
+FPS = 60
 
 ASTEROID_MIN_RADIUS = 20
 ASTEROID_KINDS = 3
@@ -14,6 +15,7 @@ PLAYER_SHOOT_COOLDOWN = 0.3
 
 SHOT_RADIUS = 5
 
+
 #  Resource Indecies
 CREDITS = 0
 SILICA = 1
@@ -25,6 +27,9 @@ URANIUM = 6
 THORIUM = 7
 
 # Asteroid Colors
+WHITE_COLOR = (255, 255, 255) # White
+GRAY_COLOR = (128, 128, 128) # Gray
+BLACK_COLOR = (0, 0, 0) # Black
 SILICA_COLOR = (194,178,128), # Sand
 IRON_COLOR = (185,78,72), # Deep Chestnut
 ALUMINUM_COLOR =  (145,163,176), # Cadet Grey
@@ -32,3 +37,4 @@ COBALT_COLOR = (176,196,222), # Light Steel Blue
 GOLD_COLOR =  (218,165,32), # Goldenrod
 URANIUM_COLOR = (173,255,47), # Green Yellow
 THORIUM_COLOR = (135,206,235), # Sky Blue
+
