@@ -9,14 +9,14 @@ class Menu:
         self.option_font = pygame.font.Font(None, 36)
         self.clock = pygame.time.Clock()
     
-    def flip_helper(self, fps):
+    def flip_helper(self):
         pygame.display.flip()
         self.clock.tick(FPS)
     
     def title_printer(self, text, text_color=WHITE_COLOR, background=BLACK_COLOR):
         self.screen.fill(background)
         title_text = self.title_font.render(text, True, text_color)
-        title_rect = title_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 4))
+        title_rect = title_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 6))
         self.screen.blit(title_text, title_rect)
 
     def main_menu(self):
@@ -46,14 +46,14 @@ class Menu:
                 option_rect = option_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 50))
                 self.screen.blit(option_text, option_rect)
             
-            self.flip_helper(FPS)
+            self.flip_helper()
 
     def instructions(self):
         instructions_running = True
 
         while instructions_running:
             for event in pygame.event.get():
-                if event.type == pygame.quit:
+                if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
@@ -73,10 +73,10 @@ class Menu:
 
             for i, line in enumerate(instructions_text):
                 text = self.option_font.render(line, True, WHITE_COLOR)
-                text_rect = text.get_rect(center=(SCREEN_WIDTH/2, 150 + i * 40))
+                text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT // 3 + i * 40))
                 self.screen.blit(text, text_rect)
             
-            self.flip_helper(FPS)
+            self.flip_helper()
         
     def options(self):
         options_running = True
@@ -88,7 +88,9 @@ class Menu:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                keys = pygame.key.get_pressed()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return "MAIN_MENU"
                     
             self.title_printer("Options Placeholder", WHITE_COLOR, BLACK_COLOR)
 
@@ -98,6 +100,6 @@ class Menu:
                 option_rect = option_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 50))
                 self.screen.blit(option_text, option_rect)
             
-            self.flip_helper(FPS)
+            self.flip_helper()
 
 

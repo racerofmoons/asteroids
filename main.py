@@ -13,7 +13,6 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Project Kessler")
     pygame.time.Clock()
-    dt = 0
     drawable = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -23,8 +22,6 @@ def main():
     AsteroidField.containers = (updatable)
     Bullet.containers = (bullets, updatable, drawable)
 
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    asteroid_field = AsteroidField()
     game = Game(screen)
     menu = Menu(screen)
 
@@ -72,7 +69,6 @@ def main():
 
 
         pygame.display.flip()
-        dt = (pygame.time.Clock().tick(FPS) / 1000)
         
 
 
