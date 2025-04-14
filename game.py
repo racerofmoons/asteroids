@@ -11,8 +11,8 @@ from menu import Menu
 
 
 class Game:
-    def __init__(self, screen, menu):
-        self.screen = screen
+    def __init__(self, config, menu):
+        self.config = config
         self.clock = pygame.time.Clock()
         self.dt = 0
         self.menu = menu
@@ -52,19 +52,7 @@ class Game:
         self.player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
         self.asteroid_field = AsteroidField()
 
-    def draw_game_state(self):
-        self.screen.fill(BLACK_COLOR)
-        for object in self.drawable:
-            object.draw(self.screen)
 
-    def event_handler(self, keys):
-        if keys[pygame.K_ESCAPE]:
-            self.is_paused = not self.is_paused
-            pygame.time.delay(200)
-
-    def pause_overlay(self):
-        self.draw_game_state()
-        self.menu.pause_menu(self.resources)
 
     def run(self):
         for event in pygame.event.get():
@@ -76,13 +64,13 @@ class Game:
             return "PLAYING"
         
         self.is_running = True
-        self.screen.fill(BLACK_COLOR)
+        self.config.screen.fill(BLACK_COLOR)
         self.updatable.update(self.dt)
         if self.player.shoot_timer > 0:
             self.player.shoot_timer -= self.dt
 
         for object in self.drawable:
-            object.draw(self.screen)
+            object.draw(self.config.screen)
 
         for asteroid in self.asteroids:
             for bullet in self.bullets:
@@ -109,6 +97,29 @@ class Game:
     def fps_helper(self):
         pygame.display.flip()
         self.dt = (self.clock.tick(FPS) / 1000)
+
+    def draw_game_state(self):
+        self.config.screen.fill(BLACK_COLOR)
+        for object in self.drawable:
+            object.draw(self.config.screen)
+
+    def event_handler(self, keys):
+        if keys[pygame.K_ESCAPE]:
+            self.is_paused = not self.is_paused
+            pygame.time.delay(200)
+
+    def pause_overlay(self):
+        self.draw_game_state()
+        self.menu.pause_menu(self.resources)
+
+
+    def pause_menu_starter(self):
+        def pause_menu_pre_render():
+            self.draw_game_state()
+            self.event_handler(keys=pygame.key.get_pressed())
+            self.menu.draw_score_table(self.resources)
+
+
 
     def reset(self):
         self.all_sprites.empty()
@@ -144,7 +155,7 @@ class Game:
         print(f"Resources: {self.resources}")
         print(f"Credits: {self.resources[CREDITS]}")
 
-    def remove_resources(self):
+    def delete_save(self):
         
         self.resources = [
             0, # 0 credits

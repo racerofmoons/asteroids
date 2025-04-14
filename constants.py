@@ -1,3 +1,6 @@
+import pygame
+import sys
+
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 FPS = 60
@@ -69,3 +72,9 @@ BLACK_COLOR = (0, 0, 0) # Black
 BUTTON_COLOR= (100, 100, 100)
 BUTTON_HOVER_COLOR = (200, 200, 200)
 LIGHT_GREY_COLOR = (200, 200, 200)
+
+def emergency_exit():
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LCTRL] and keys[pygame.K_q]:
+        pygame.quit()
+        sys.exit()

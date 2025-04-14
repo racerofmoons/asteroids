@@ -10,6 +10,16 @@ class Player(CircleShape):
         self.shoot_timer = 0.0
         self.bomb_timer = 0.0
 
+        
+        self.upgrades = [
+            0, # 0 Shotgun
+            0, # 1 Explosive
+            0, # 2 Laser
+            0, # 3 Shield
+            0, # 4 Engines
+            0, # 5 Turret
+        ]
+
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5

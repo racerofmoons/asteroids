@@ -2,17 +2,17 @@ import pygame
 import sys
 import os
 from constants import *
+from config import *
+from menu import Menu
+from game import Game
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from bullet import Bullet
-from game import Game
-from menu import Menu
 
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Project Kessler")
     pygame.time.Clock()
     drawable = pygame.sprite.Group()
@@ -23,16 +23,18 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Bullet.containers = (bullets, updatable, drawable)
-
-    menu = Menu(screen)
-    game = Game(screen, menu)
+    config = Config()
+    menu = Menu(config)
+    game = Game(config, menu)
 
     while True:
+        emergency_exit()
         if game.state == "MAIN_MENU":
-            action = menu.main_menu()
+            action = menu.run_menu("Project Kessler - Asteroid Miner", MAIN_MENU_OPTIONS)
             if action == "START_GAME":
                 if os.path.exists("savegame.dat"):
                     # game.load_game()
+                    game.reset()
                     game.state = "START_GAME"
                 else:
                     game.reset()
@@ -70,3 +72,10 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+def emergency_exit():
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LCTRL] and keys[pygame.K_q]:
+        pygame.quit()
+        sys.exit()

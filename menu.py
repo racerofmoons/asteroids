@@ -10,8 +10,8 @@ user_menu_inputs = [
 ]
 
 class Menu:
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self, config):
+        self.config = config
         self.title_font = pygame.font.Font(None, 74)
         self.option_font = pygame.font.Font(None, 36)
         self.clock = pygame.time.Clock()
@@ -22,10 +22,10 @@ class Menu:
         self.clock.tick(FPS)
     
     def title_printer(self, text, text_color=WHITE_COLOR, background=BLACK_COLOR):
-        self.screen.fill(background)
+        self.config.screen.fill(background)
         title_text = self.title_font.render(text, True, text_color)
-        title_rect = title_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 6))
-        self.screen.blit(title_text, title_rect)
+        title_rect = title_text.get_rect(center=(self.config.screen.get_width() // 2, self.config.screen.get_height() // 6))
+        self.config.screen.blit(title_text, title_rect)
 
     def menu_event_handler(self, event, menu_options, selected_option, user_inputs=user_menu_inputs):
         if event.type == pygame.QUIT:
@@ -64,24 +64,40 @@ class Menu:
     def draw_menu_buttons(self, buttons, selected_option=0):
         for i, button in enumerate(buttons):
             is_selected = (selected_option is not None and i == selected_option)
-            button.draw(self.screen, is_selected)
+            button.draw(self.config.screen, is_selected)
+
+        
 
 
-    def main_menu(self):
+
+
+    def run_menu(
+            self, 
+            title, 
+            menu_options, 
+            background_color=BLACK_COLOR,
+            pre_render_callback=None,
+            post_render_callback=None
+            ):
         menu_running = True
         selected_option = 0
-        menu_buttons = self.create_menu_buttons(MAIN_MENU_OPTIONS)
-
+        menu_buttons = self.create_menu_buttons(menu_options)
         while menu_running:
-            self.screen.fill(BLACK_COLOR)
+            emergency_exit()
+            self.config.screen.fill(background_color)
+            if pre_render_callback:
+                pre_render_callback(self)
             for i, button in enumerate(menu_buttons):
                 if not self.keyboard_navigation:
                     if button.is_hovered():
                         selected_option = i
                         break
-
+            self.title_printer(title, WHITE_COLOR, BLACK_COLOR)
+            self.draw_menu_buttons(menu_buttons, selected_option)
+            if post_render_callback:
+                post_render_callback(self)
             for event in pygame.event.get():
-                result = self.menu_event_handler(event, MAIN_MENU_OPTIONS, selected_option)
+                result = self.menu_event_handler(event, menu_options, selected_option)
                 selected_option = result[0]
                 if result[1]:
                     return result[1]
@@ -90,12 +106,17 @@ class Menu:
                         action_result = button.click()
                         if action_result:
                             return action_result
-                    
-            self.title_printer("Project Kessler - Asteroid Miner", WHITE_COLOR, BLACK_COLOR)
-
-            self.draw_menu_buttons(menu_buttons, selected_option)
-            
             self.flip_helper()
+
+
+    def load_menu(self):
+        menu_running = True
+        selected_option = 0
+        
+
+
+
+
 
     def draw_score_table(self, resources, table_width=600, row_height=40):
         font = pygame.font.Font(None, 36)
@@ -104,16 +125,15 @@ class Menu:
         table_y = (SCREEN_HEIGHT - table_height) // 2
         table_bg = pygame.Surface((table_width, table_height))
         table_bg.fill((0, 0, 0, 128))
-        self.screen.blit(table_bg, (table_x, table_y))
-        col_width = table_width // 2
+        self.config.screen.blit(table_bg, (table_x, table_y))
         for i, (key, value) in enumerate(RESOURCES.items()):
             name_text = font.render(value, True, (220, 220, 220))
             name_rect = name_text.get_rect(midleft=(table_x + 20, table_y + 50 + i * row_height))
-            self.screen.blit(name_text, name_rect)
+            self.config.screen.blit(name_text, name_rect)
 
             value_text = font.render(str(resources[i]), True, (220, 220, 220))
             value_rect = value_text.get_rect(midright=(table_x + table_width - 20, table_y + 50 + i * row_height))
-            self.screen.blit(value_text, value_rect)
+            self.config.screen.blit(value_text, value_rect)
         
         
     def pause_menu(self, resources):
@@ -125,7 +145,7 @@ class Menu:
             font = pygame.font.Font(None, 74)
             text = font.render("PAUSED", True, (255, 255, 255))
             text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
-            self.screen.blit(text, text_rect)
+            self.config.screen.blit(text, text_rect)
             self.draw_score_table(resources)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -158,7 +178,7 @@ class Menu:
                 color = WHITE_COLOR if i == selected_option else GRAY_COLOR
                 option_text = self.option_font.render(option, True, color)
                 option_rect = option_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 50))
-                self.screen.blit(option_text, option_rect)
+                self.config.screen.blit(option_text, option_rect)
             
             self.flip_helper()
 
@@ -189,7 +209,7 @@ class Menu:
             for i, line in enumerate(instructions_text):
                 text = self.option_font.render(line, True, WHITE_COLOR)
                 text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT // 3 + i * 40))
-                self.screen.blit(text, text_rect)
+                self.config.screen.blit(text, text_rect)
             
             self.flip_helper()
 
