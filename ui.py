@@ -2,7 +2,7 @@ import pygame
 from constants import *
 
 class Button:
-    def __init__(self, position, text="BUTTON", action=None, font=None, color=BUTTON_COLOR, hover_color=BUTTON_HOVER_COLOR):
+    def __init__(self, position, text="BUTTON", action=None, font=None, color=BUTTON_COLOR, hover_color=BUTTON_HOVER_COLOR, width=None, height=None):
         self.position = position
         self.text = text
         self.font = font or pygame.font.SysFont(None, 30)
@@ -11,14 +11,19 @@ class Button:
         self.action = action
         self.text_surface = self.font.render(text, True, BLACK_COLOR)
         self.text_rect = self.text_surface.get_rect()
-        self.padding = 10
+        self.width_padding = 10
+        self.height_padding = 10
+        button_width = width + (self.width_padding * 2) if width else self.text_rect.width + (self.width_padding * 2)
+        button_height = height + (self.height_padding * 2) if height else self.text_rect.height + (self.height_padding * 2)
+
         self.rect = pygame.Rect(
             position[0],
             position[1],
-            self.text_rect.width + (self.padding * 2),
-            self.text_rect.height + (self.padding * 2)
+            button_width,
+            button_height
             )
         self.text_rect.center = self.rect.center
+
 
     def draw(self, surface, is_selected=False):
         if is_selected:

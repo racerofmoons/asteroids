@@ -10,7 +10,6 @@ class Player(CircleShape):
         self.shoot_timer = 0.0
         self.bomb_timer = 0.0
 
-        
         self.upgrades = [
             0, # 0 Shotgun
             0, # 1 Explosive

@@ -2,7 +2,9 @@ import pygame
 import math
 import pickle
 import time
+import os
 from constants import *
+from config import *
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
@@ -16,7 +18,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.dt = 0
         self.menu = menu
-
         self.resources = [
             0, # 0 credits
             0, # 1 silica
@@ -29,7 +30,9 @@ class Game:
             1, # 8 level
             0, # 9 xp
             10, # 10 xp to next_level
-        ]
+            ]
+
+
         self.level = 8
         self.xp = 9
         self.next_level = 10
@@ -49,8 +52,27 @@ class Game:
         AsteroidField.containers = (self.all_sprites, self.updatable)
         Bullet.containers = (self.all_sprites, self.bullets, self.updatable, self.drawable)
         
-        self.player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-        self.asteroid_field = AsteroidField()
+        self.player = Player(self.config.screen_width / 2, self.config.screen_height / 2)
+        self.asteroid_field = AsteroidField(self.config)
+        
+    def reset_resources(self):
+        self.resources = [
+            0, # 0 credits
+            0, # 1 silica
+            0, # 2 iron
+            0, # 3 aluminum
+            0, # 4 cobalt
+            0, # 5 gold
+            0, # 6 uranium
+            0, # 7 thorium
+            1, # 8 level
+            0, # 9 xp
+            10, # 10 xp to next_level
+        ]
+
+    def reset_all(self):
+        self.reset_resources()
+        self.player.reset_upgrades()
 
 
 
@@ -121,7 +143,7 @@ class Game:
 
 
 
-    def reset(self):
+    def reset_run(self, config):
         self.all_sprites.empty()
         self.drawable.empty()
         self.updatable.empty()
@@ -139,11 +161,12 @@ class Game:
         AsteroidField.containers = (self.all_sprites, self.updatable)
         Bullet.containers = (self.all_sprites, self.bullets, self.updatable, self.drawable)
 
-        self.player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-        self.asteroid_field = AsteroidField()
+        self.player = Player(self.config.screen_width / 2, self.config.screen_height / 2)
+        self.asteroid_field = AsteroidField(config)
 
 
     def score_keeper(self, target_tier):
+        tier = max(0, min(target_tier, len(self.resources) - 1))
         self.resources[target_tier] += 1
         self.resources[self.xp] += target_tier
         self.resources[CREDITS] += target_tier * 2
@@ -155,36 +178,20 @@ class Game:
         print(f"Resources: {self.resources}")
         print(f"Credits: {self.resources[CREDITS]}")
 
-    def delete_save(self):
-        
-        self.resources = [
-            0, # 0 credits
-            0, # 1 silica
-            0, # 2 iron
-            0, # 3 aluminum
-            0, # 4 cobalt
-            0, # 5 gold
-            0, # 6 uranium
-            0, # 7 thorium
-            1, # 8 level
-            0, # 9 xp
-            10, # 10 xp to next_level
-        ]
-
     def save_game(self):
         save_data = {
             'resources': self.resources,
             'save_data': time.time(),
         }
         try:
-            with open("savegame.dat", "wb") as save_file:
+            with open(SAVE_FILE, "wb") as save_file:
                 pickle.dump(save_data, save_file)
         except Exception as e:
             print(f"Error saving game: {e}")
 
     def load_game(self):
         try:
-            with open('savegame.dat', 'rb') as file:
+            with open(SAVE_FILE, "rb") as file:
                 save_data = pickle.load(file)
                 self.resources = save_data['resources']
             print("Game loaded successfully.")

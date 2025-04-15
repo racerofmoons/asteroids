@@ -2,6 +2,7 @@ import random
 import math
 from constants import *
 from circleshape import *
+from config import *
 
 
 class Asteroid(CircleShape):
@@ -14,18 +15,11 @@ class Asteroid(CircleShape):
         6: (173,255,47), # Green Yellow -- Uranium
         7: (135,206,235), # Sky Blue -- Thorium
         }
-    weights = [
-        (1, 50),
-        (2, 25),
-        (3, 10),
-        (4, 8),
-        (5, 4),
-        (6, 2),
-        (7, 1),
-    ]
 
-    def __init__(self, x, y, radius):
+    def __init__(self, x, y, radius, config):
         super().__init__(x, y, radius)
+        self.config = config
+        self.weights = config.weights
         self.verticies = self.lumpy_shape()
         self.tier = self.select_tier()
         self.color = self.colors[self.tier]
@@ -64,7 +58,7 @@ class Asteroid(CircleShape):
         return asteroid1, asteroid2
 
     def fragment(self, position, radius, vector):
-        asteroid = Asteroid(position.x, position.y, radius)
+        asteroid = Asteroid(position.x, position.y, radius, self.config)
         asteroid.velocity = vector * 1.2
         asteroid.collision_timer = 0.7
         asteroid.tier = self.tier
